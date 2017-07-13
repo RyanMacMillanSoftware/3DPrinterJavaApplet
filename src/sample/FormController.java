@@ -6,7 +6,10 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Optional;
 
 /*
@@ -26,16 +29,19 @@ public class FormController{
     @FXML private Spinner volume;
     @FXML private TextArea notes;
     @FXML private TableView job_table;
-    private ArrayList<String> names;
-    private ArrayList<String> projects;
+    private ArrayList<Name> names;
+    private ArrayList<Project> projects;
+    private final File PROJECTS_FILE = new File(System.getProperty("user.home")+"/.user/projects.ser");
+    private final File NAMES_FILE = new File(System.getProperty("user.home")+"/.user/names.ser");
+
 
     @FXML
     public void initialise(){
-        names = getNames();
-        projects = getProjects();
-        fillNameOptions(names);
-        fillProjectOptions(projects);
-        establishHerokuConnection();
+        names = new ArrayList<Name>();
+        projects = new ArrayList<Project>();
+        fillNameOptions();
+        fillProjectOptions();
+        //establishHerokuConnection();
     }
 
     @FXML
@@ -65,10 +71,10 @@ public class FormController{
         // Traditional way to get the response value.
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()){
-            //String new_name = result.get();
-            //addProjectToDatabase();
-            names = getNames();
-            //fillProjectOptions();
+            String user_name = result.get();
+            Name new_name = new Name(user_name);
+            addNameToDatabase(new_name);
+            fillNameOptions();
         }
     }
 
@@ -101,10 +107,10 @@ public class FormController{
         // Traditional way to get the response value.
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()){
-            //String new_project = result.get();
-            //addProjectToDatabase();
-            projects = getProjects();
-            //fillProjectOptions();
+            String project_name = result.get();
+            Project new_project = new Project(project_name);
+            addProjectToDatabase(new_project);
+            fillProjectOptions();
         }
     }
 
@@ -153,45 +159,105 @@ public class FormController{
     }
 
     //retrieve all names from the local database
-    private ArrayList<String> getNames(){
-        //establish connection
-        ArrayList<String> names_read = new ArrayList<String>();
-        //read objects
+    private ArrayList<Name> getNames(){
+        ArrayList<Name> names_read = new ArrayList<Name>();
+        //establish read connection
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(NAMES_FILE);
+
+
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            names_read = (ArrayList<Name>) ois.readObject();
+            ois.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return names_read;
     }
 
-    private ArrayList<String> getProjects(){
-        //establish connection
-        ArrayList<String> projects_read = new ArrayList<String>();
-        //read objects
+    private ArrayList<Project> getProjects(){
+        ArrayList<Project> projects_read = new ArrayList<Project>();
+        //establish read connection
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(PROJECTS_FILE);
+
+
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            projects_read = (ArrayList<Project>) ois.readObject();
+            ois.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return projects_read;
     }
 
-    private void fillNameOptions(ArrayList<String> names){
-        //fill "name" with names
+    private void fillNameOptions(){
+        names = getNames();
+        name.getItems().clear();
+        name.getItems().addAll(names);
     }
 
-    private void fillProjectOptions(ArrayList<String> projects){
-        //fill "project" with projects
+    private void fillProjectOptions(){
+        projects = getProjects();
+        project.getItems().clear();
+        project.getItems().addAll(projects);
     }
 
-    private void addNameToDatabase(String name){
+    private void addNameToDatabase(Name n){
+
         //establish write connection
-        //add alphabetically
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(NAMES_FILE);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+        //add name to list
+        names.add(n);
+        //sort alphabetically
+        Collections.sort(names);
+        //write to file
+        oos.writeObject(names);
+        oos.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void removeNameFromDatabase(String name){
+    private void removeNameFromDatabase(Name n){
         //establish write connection
         //find name
         //remove name
     }
 
-    private void addProjectToDatabase(String project){
+    private void addProjectToDatabase(Project p){
         //establish write connection
-        //add alphabetically
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(PROJECTS_FILE);
+
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            //add name to list
+            projects.add(p);
+            //sort alphabetically
+            Collections.sort(projects);
+            //write to file
+            oos.writeObject(projects);
+            oos.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void removeProjectFromDatabase(String project){
+    private void removeProjectFromDatabase(Project p){
         //establish write connection
         //find name
         //remove name

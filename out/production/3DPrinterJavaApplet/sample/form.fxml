@@ -27,13 +27,13 @@
       </AnchorPane>
       <HBox prefHeight="54.0" prefWidth="500.0" spacing="10.0">
          <children>
-            <Label text="Name:">
+            <Label text="Name">
                <HBox.margin>
-                  <Insets left="8.0" top="4.0" />
+                  <Insets top="4.0" />
                </HBox.margin></Label>
             <ComboBox fx:id="name" prefWidth="250.0">
                <HBox.margin>
-                  <Insets />
+                  <Insets left="8.0" />
                </HBox.margin></ComboBox>
             <Button fx:id="name_add_btn" mnemonicParsing="false" onAction="#addName" text="Add" />
             <Button fx:id="name_remove_btn" mnemonicParsing="false" onAction="#removeName" text="Remove" />
@@ -44,7 +44,7 @@
       </HBox>
       <HBox layoutX="10.0" layoutY="170.0" prefHeight="54.0" prefWidth="500.0" spacing="10.0">
          <children>
-            <Label text="Project:">
+            <Label text="Project">
                <HBox.margin>
                   <Insets top="4.0" />
                </HBox.margin></Label>
@@ -60,10 +60,13 @@
          <children>
             <Label text="From:">
                <HBox.margin>
-                  <Insets left="10.0" top="4.0" />
+                  <Insets top="4.0" />
                </HBox.margin></Label>
-            <JFXTimePicker fx:id="from_time" prefWidth="150.0" promptText="--:-- PM" />
-            <Label text="To:">
+            <JFXTimePicker fx:id="from_time" prefWidth="150.0" promptText="--:-- AM">
+               <HBox.margin>
+                  <Insets left="11.0" />
+               </HBox.margin></JFXTimePicker>
+            <Label text="To">
                <padding>
                   <Insets left="10.0" />
                </padding>
@@ -77,38 +80,50 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </HBox>
-      <HBox prefHeight="26.0" prefWidth="500.0" spacing="10.0">
+      <HBox prefHeight="37.0" prefWidth="500.0" spacing="4.0">
          <children>
-            <Label text="Volume:">
+            <Label text="Volume">
                <HBox.margin>
-                  <Insets left="4.0" top="4.0" />
+                  <Insets top="4.0" />
                </HBox.margin></Label>
-            <Spinner fx:id="volume" prefWidth="145.0" />
+            <Spinner fx:id="volume" prefWidth="145.0">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin></Spinner>
             <Label text="mL">
                <HBox.margin>
-                  <Insets left="-7.0" top="4.0" />
+                  <Insets top="4.0" />
                </HBox.margin>
             </Label>
          </children>
-      </HBox>
-      <AnchorPane prefHeight="90.0" prefWidth="490.0">
-         <children>
-            <Label layoutX="8.0" layoutY="6.0" text="Notes:" />
-            <TextArea fx:id="notes" layoutX="50.0" layoutY="21.0" prefHeight="61.0" prefWidth="394.0" promptText="Part description, etc." />
-         </children>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
          <VBox.margin>
-            <Insets left="10.0" top="10.0" />
+            <Insets left="10.0" />
          </VBox.margin>
-      </AnchorPane>
-      <AnchorPane prefHeight="98.0" prefWidth="500.0">
+      </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>
-            <Button layoutX="161.0" layoutY="10.0" mnemonicParsing="false" onAction="#submitForm" text="Submit" />
-            <Button layoutX="278.0" layoutY="10.0" mnemonicParsing="false" onAction="#clearForm" text="Clear" />
+            <Label text="Notes">
+               <HBox.margin>
+                  <Insets top="4.0" />
+               </HBox.margin></Label>
+            <TextArea fx:id="notes" prefHeight="61.0" prefWidth="390.0" promptText="Part description, etc.">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin></TextArea>
          </children>
-      </AnchorPane>
+         <VBox.margin>
+            <Insets left="10.0" top="8.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox prefHeight="31.0" prefWidth="500.0" spacing="50.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#submitForm" text="Submit" />
+            <Button mnemonicParsing="false" onAction="#clearForm" text="Clear" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="150.0" top="10.0" />
+         </padding>
+      </HBox>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
             <TableView prefHeight="200.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

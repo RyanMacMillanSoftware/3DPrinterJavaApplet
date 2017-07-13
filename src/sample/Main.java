@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.File;
+
 public class Main extends Application {
 
     @Override
@@ -18,6 +20,19 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+        ensureNameAndProjectFiles();
         launch(args);
     }
+
+    public static void ensureNameAndProjectFiles(){
+        File file = new File(System.getProperty("user.home")+"/.user/names.ser");
+        if(!file.exists()){
+            file.getParentFile().mkdirs();
+        }
+        file = new File(System.getProperty("user.home")+"/.user/projects.ser");
+        if(!file.exists()){
+            file.getParentFile().mkdirs();
+        }
+    }
 }
+
