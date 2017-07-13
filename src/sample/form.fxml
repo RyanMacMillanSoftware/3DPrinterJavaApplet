@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import java.lang.Integer?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="469.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.FormController">
    <children>
       <AnchorPane prefHeight="60.0" prefWidth="500.0">
@@ -86,10 +87,15 @@
                <HBox.margin>
                   <Insets top="4.0" />
                </HBox.margin></Label>
-            <Spinner fx:id="volume" prefWidth="145.0">
+            <fx:define>
+               <Integer fx:id="min" fx:value="0"/>
+               <Integer fx:id="max" fx:value="1000"/>
+            </fx:define>
+            <Spinner fx:id="volume" prefWidth="145.0" min="0" max="1000" editable="true" amountToStepBy="1">
                <HBox.margin>
                   <Insets />
-               </HBox.margin></Spinner>
+               </HBox.margin>
+            </Spinner>
             <Label text="mL">
                <HBox.margin>
                   <Insets top="4.0" />
