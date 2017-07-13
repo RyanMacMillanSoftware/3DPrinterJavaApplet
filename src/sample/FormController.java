@@ -1,19 +1,19 @@
 package sample;
 
 
+import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /*
 Class made by Ryan MacMillan on 13 July 2017
-Form Controller is the GUI controller for this application. It fills the dropdown headers, manages the local storage
+Form Controller is the main form controller for this application. It fills the dropdown headers, manages the local storage
 of available projects and names, displays a list of people currently in the lab, and it submits form information to
 the Heroku database.
  */
@@ -22,11 +22,12 @@ public class FormController{
 
 
     @FXML private ComboBox name;
-    @FXML private ComboBox project
+    @FXML private ComboBox project;
     @FXML private Spinner from_time;
     @FXML private Spinner to_time;
     @FXML private Spinner volume;
     @FXML private TextArea notes;
+    @FXML private TableView job_table;
     private ArrayList<String> names;
     private ArrayList<String> projects;
 
@@ -40,47 +41,91 @@ public class FormController{
     }
 
     @FXML
-    public void submitForm(MouseEvent me) {
+    public void submitForm(Event me) {
         establishHerokuConnection();
         //format data
         sendFormDataToHeroku();
+        addDataToTable();
         clearFormElements(); //if no error
+
     }
 
     @FXML
-    public void clearForm(MouseEvent me) {
+    public void clearForm(Event me) {
         //are you sure dialogue (debatable feature)
         clearFormElements();
     }
 
     @FXML
-    public void addName(MouseEvent me){
-        addNameToDatabase();
-        names = getNames();
-        fillNameOptions();
+    public void addName(Event e){
+        //Get Project name from user
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("New Name");
+        dialog.setHeaderText("Add a Name");
+        dialog.setContentText("Please enter the name:");
+
+        // Traditional way to get the response value.
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            //String new_name = result.get();
+            //addProjectToDatabase();
+            names = getNames();
+            //fillProjectOptions();
+        }
     }
 
     @FXML
-    public void removeName(MouseEvent me){
-        //are you sure dialogue
-        removeNameFromDatabase();
-        names = getNames();
-        fillNameOptions();
+    public void removeName(Event me){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("You are about to remove a name from the list");
+        alert.setContentText("Are you ok with this?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            //removeNameFromDatabase();
+            names = getNames();
+            //fillNameOptions();
+            return;
+        } else {
+            return;
+        }
     }
 
     @FXML
-    public void addProject(MouseEvent me){
-        addProjectToDatabase();
-        projects = getProjects();
-        fillProjectOptions();
+    public void addProject(Event me){
+        //Get Project name from user
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("New Project");
+        dialog.setHeaderText("Add a Project");
+        dialog.setContentText("Please enter the project name:");
+
+        // Traditional way to get the response value.
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            //String new_project = result.get();
+            //addProjectToDatabase();
+            projects = getProjects();
+            //fillProjectOptions();
+        }
     }
 
     @FXML
-    public void removeProject(MouseEvent me){
-        //are you sure dialogue
-        removeProjectFromDatabase();
-        projects = getProjects();
-        fillProjectOptions();
+    public void removeProject(Event me){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("You are about to remove a project from the list");
+        alert.setContentText("Are you ok with this?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            //removeProjectFromDatabase();
+            projects = getProjects();
+            //fillProjectOptions();
+            return;
+        } else {
+            return;
+        }
     }
 
     private void clearFormElements(){
@@ -112,14 +157,16 @@ public class FormController{
     //retrieve all names from the local database
     private ArrayList<String> getNames(){
         //establish connection
+        ArrayList<String> names_read = new ArrayList<String>();
         //read objects
-        //return list
+        return names_read;
     }
 
     private ArrayList<String> getProjects(){
         //establish connection
+        ArrayList<String> projects_read = new ArrayList<String>();
         //read objects
-        //return list
+        return projects_read;
     }
 
     private void fillNameOptions(ArrayList<String> names){
@@ -143,13 +190,18 @@ public class FormController{
 
     private void addProjectToDatabase(String project){
         //establish write connection
-        //find name
-        //remove name
+        //add alphabetically
     }
 
     private void removeProjectFromDatabase(String project){
         //establish write connection
         //find name
         //remove name
+    }
+
+    private void addDataToTable(){
+        //need name and to_time
+        //add to table
+        //need behaviour to eventually remove old entries
     }
 }
