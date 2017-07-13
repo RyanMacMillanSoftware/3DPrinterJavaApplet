@@ -1,14 +1,12 @@
 package sample;
 
 
+import com.jfoenix.controls.JFXTimePicker;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /*
@@ -23,8 +21,8 @@ public class FormController{
 
     @FXML private ComboBox name;
     @FXML private ComboBox project;
-    @FXML private Spinner from_time;
-    @FXML private Spinner to_time;
+    @FXML private JFXTimePicker from_time;
+    @FXML private JFXTimePicker to_time;
     @FXML private Spinner volume;
     @FXML private TextArea notes;
     @FXML private TableView job_table;
