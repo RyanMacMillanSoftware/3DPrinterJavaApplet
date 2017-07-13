@@ -36,7 +36,7 @@ public class FormController{
 
 
     @FXML
-    public void initialise(){
+    public void initialize(){
         names = new ArrayList<Name>();
         projects = new ArrayList<Project>();
         fillNameOptions();
@@ -87,9 +87,16 @@ public class FormController{
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
-            //removeNameFromDatabase();
-            names = getNames();
-            //fillNameOptions();
+            Name chosen_name = null;
+            for (Name n : names){
+                if (n.getName().equals(name.getValue())){
+                    chosen_name = n;
+                }
+            }
+            if (chosen_name != null) {
+                removeNameFromDatabase(chosen_name);
+                fillNameOptions();
+            }
             return;
         } else {
             return;
@@ -123,9 +130,16 @@ public class FormController{
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
-            //removeProjectFromDatabase();
-            projects = getProjects();
-            //fillProjectOptions();
+            Project chosen_project = null;
+            for (Project p : projects){
+                if (p.getName().equals(project.getValue())){
+                    chosen_project = p;
+                }
+            }
+            if (chosen_project != null) {
+                removeProjectFromDatabase(chosen_project);
+                fillProjectOptions();
+            }
             return;
         } else {
             return;
@@ -202,13 +216,17 @@ public class FormController{
     private void fillNameOptions(){
         names = getNames();
         name.getItems().clear();
-        name.getItems().addAll(names);
+        for (Name n : names){
+            name.getItems().add(n.getName());
+        }
     }
 
     private void fillProjectOptions(){
         projects = getProjects();
         project.getItems().clear();
-        project.getItems().addAll(projects);
+        for (Project p : projects){
+            project.getItems().add(p.getName());
+        }
     }
 
     private void addNameToDatabase(Name n){
@@ -216,7 +234,7 @@ public class FormController{
         //establish write connection
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(NAMES_FILE);
+            fos = new FileOutputStream(NAMES_FILE, false);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
         //add name to list
         names.add(n);
@@ -233,15 +251,30 @@ public class FormController{
 
     private void removeNameFromDatabase(Name n){
         //establish write connection
-        //find name
-        //remove name
+        FileOutputStream fos = null;
+        try {
+
+            //false overwrites
+            fos = new FileOutputStream(NAMES_FILE, false);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            //remove name from list
+            names.remove(n);
+            //sort alphabetically
+            Collections.sort(names);
+            //write to file
+            oos.writeObject(names);
+            oos.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void addProjectToDatabase(Project p){
         //establish write connection
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(PROJECTS_FILE);
+            fos = new FileOutputStream(PROJECTS_FILE, false);
 
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             //add name to list
@@ -258,9 +291,23 @@ public class FormController{
     }
 
     private void removeProjectFromDatabase(Project p){
-        //establish write connection
-        //find name
-        //remove name
+        FileOutputStream fos = null;
+        try {
+
+            //false overwrites
+            fos = new FileOutputStream(PROJECTS_FILE, false);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            //remove project from list
+            projects.remove(p);
+            //sort alphabetically
+            Collections.sort(projects);
+            //write to file
+            oos.writeObject(projects);
+            oos.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void addDataToTable(){
