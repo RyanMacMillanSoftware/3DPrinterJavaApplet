@@ -30,12 +30,12 @@
                <HBox.margin>
                   <Insets left="8.0" top="4.0" />
                </HBox.margin></Label>
-            <ComboBox prefWidth="280.0">
+            <ComboBox fx:id="name" prefWidth="250.0">
                <HBox.margin>
                   <Insets />
                </HBox.margin></ComboBox>
-            <Button mnemonicParsing="false" text="Add" />
-            <Button mnemonicParsing="false" text="Edit" />
+            <Button fx:id="name_add_btn" mnemonicParsing="false" onAction="#addName" text="Add" />
+            <Button fx:id="name_remove_btn" mnemonicParsing="false" onAction="#removeName" text="Remove" />
          </children>
          <padding>
             <Insets left="10.0" top="10.0" />
@@ -47,9 +47,9 @@
                <HBox.margin>
                   <Insets top="4.0" />
                </HBox.margin></Label>
-            <ComboBox prefWidth="280.0" />
-            <Button mnemonicParsing="false" text="Add" />
-            <Button mnemonicParsing="false" text="Edit" />
+            <ComboBox fx:id="project" prefWidth="250.0" />
+            <Button fx:id="project_add_btn" mnemonicParsing="false" onAction="#addProject" text="Add" />
+            <Button fx:id="project_remove_btn" mnemonicParsing="false" onAction="#removeProject" text="Remove" />
          </children>
          <padding>
             <Insets left="10.0" top="10.0" />
@@ -61,7 +61,7 @@
                <HBox.margin>
                   <Insets left="10.0" top="4.0" />
                </HBox.margin></Label>
-            <Spinner prefWidth="150.0" />
+            <Spinner fx:id="from_time" prefWidth="150.0" />
             <Label text="To:">
                <padding>
                   <Insets left="10.0" />
@@ -70,16 +70,30 @@
                   <Insets left="37.0" top="4.0" />
                </HBox.margin>
             </Label>
-            <Spinner prefWidth="150.0" />
+            <Spinner fx:id="to_time" prefWidth="150.0" />
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </HBox>
+      <HBox prefHeight="26.0" prefWidth="500.0" spacing="10.0">
+         <children>
+            <Label text="Volume:">
+               <HBox.margin>
+                  <Insets left="4.0" top="4.0" />
+               </HBox.margin></Label>
+            <Spinner fx:id="volume" prefWidth="150.0" />
+            <Label text="mL">
+               <HBox.margin>
+                  <Insets left="-7.0" top="4.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
       <AnchorPane prefHeight="90.0" prefWidth="490.0">
          <children>
-            <Label text="Notes:" />
-            <TextArea layoutX="50.0" layoutY="21.0" prefHeight="61.0" prefWidth="394.0" />
+            <Label layoutX="8.0" text="Notes:" />
+            <TextArea fx:id="notes" layoutX="50.0" layoutY="21.0" prefHeight="61.0" prefWidth="394.0" promptText="Part description, etc." />
          </children>
          <opaqueInsets>
             <Insets />
@@ -90,18 +104,19 @@
       </AnchorPane>
       <AnchorPane prefHeight="98.0" prefWidth="500.0">
          <children>
-            <Button layoutX="162.0" layoutY="13.0" mnemonicParsing="false" text="Submit" />
-            <Button layoutX="279.0" layoutY="13.0" mnemonicParsing="false" text="Clear" />
+            <Button layoutX="161.0" layoutY="10.0" mnemonicParsing="false" onAction="#submitForm" text="Submit" />
+            <Button layoutX="278.0" layoutY="10.0" mnemonicParsing="false" onAction="#clearForm" text="Clear" />
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
             <TableView prefHeight="200.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <columns>
-                <TableColumn prefWidth="75.0" text="Name" />
-                <TableColumn prefWidth="148.0" text="Estimated Finish" />
+                <TableColumn fx:id="name_col" minWidth="300.0" prefWidth="75.0" text="Name" />
+                <TableColumn fx:id="estimated_finish_col" minWidth="200.0" prefWidth="148.0" text="Estimated Finish" />
               </columns>
             </TableView>
-         </children></AnchorPane>
+         </children>
+      </AnchorPane>
    </children>
 </VBox>
