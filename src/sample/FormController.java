@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.io.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -39,8 +40,14 @@ public class FormController{
     public void initialize(){
         names = new ArrayList<Name>();
         projects = new ArrayList<Project>();
+        //reset name
         fillNameOptions();
+        //reset project
         fillProjectOptions();
+        //reset from_time
+        from_time.setValue(LocalTime.now());
+        //reset to_time
+        to_time.setValue(LocalTime.now());
         //establishHerokuConnection();
     }
 
@@ -148,11 +155,17 @@ public class FormController{
 
     private void clearFormElements(){
         //reset name
+        fillNameOptions();
         //reset project
+        fillProjectOptions();
         //reset from_time
+        from_time.setValue(LocalTime.now());
         //reset to_time
+        to_time.setValue(LocalTime.now());
         //reset volume
+        //TODO
         //reset notes
+        notes.clear();
     }
 
     //establish Heroku connection to see if it's working

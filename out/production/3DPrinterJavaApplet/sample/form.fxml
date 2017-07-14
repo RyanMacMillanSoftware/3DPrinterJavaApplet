@@ -89,9 +89,9 @@
                </HBox.margin></Label>
             <fx:define>
                <Integer fx:id="min" fx:value="0"/>
-               <Integer fx:id="max" fx:value="200"/>
+               <Integer fx:id="max" fx:value="1000"/>
             </fx:define>
-            <Spinner fx:id="volume" prefWidth="145.0" min="0" max="200" editable="true" amountToStepBy="1">
+            <Spinner fx:id="volume" prefWidth="145.0" min="0" max="1000" editable="true" amountToStepBy="1">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
