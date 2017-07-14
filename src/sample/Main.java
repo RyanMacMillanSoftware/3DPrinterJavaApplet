@@ -15,6 +15,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("form.fxml"));
         primaryStage.setTitle("3D Printer Record");
         primaryStage.setScene(new Scene(root, 500, 500));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

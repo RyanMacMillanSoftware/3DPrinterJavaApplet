@@ -7,6 +7,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.io.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Driver;
+import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +38,7 @@ public class FormController{
     private ArrayList<Project> projects;
     private final File PROJECTS_FILE = new File(System.getProperty("user.home")+"/.user/projects.ser");
     private final File NAMES_FILE = new File(System.getProperty("user.home")+"/.user/names.ser");
+    Connection _heroku_connection = null;
 
 
     @FXML
@@ -48,13 +53,14 @@ public class FormController{
         from_time.setValue(LocalTime.now());
         //reset to_time
         to_time.setValue(LocalTime.now());
-        //establishHerokuConnection();
+        establishHerokuConnection();
     }
 
     @FXML
     public void submitForm(Event me) {
         establishHerokuConnection();
         //format data
+        checkFormErrors();
         sendFormDataToHeroku();
         addDataToTable();
         clearFormElements(); //if no error
@@ -170,10 +176,73 @@ public class FormController{
 
     //establish Heroku connection to see if it's working
     private void establishHerokuConnection(){
+
+
+        String url = fetchHerokuConfigVar();
+
+
+        //code source: https://www.mkyong.com/jdbc/how-do-connect-to-postgresql-with-jdbc-driver-java/ and editted
+        Connection conn = null;
+
+        try {
+
+            Class.forName("org.postgresql.Driver");
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return;
+
+        }
+
+        System.out.println("PostgreSQL JDBC Driver Registered!");
+
+        Connection connection = null;
+
+        try {
+            //TODO
+            connection = DriverManager.getConnection(
+                    url, "Foomykong",
+                    "Foo123?");
+
+        } catch (SQLException e) {
+
+            System.out.println("Connection Failed! Check output console");
+            e.printStackTrace();
+            return;
+
+        }
+
+        if (connection != null) {
+            _heroku_connection = connection;
+        } else {
+            System.out.println("Failed to make connection!");
+        }
         //try establish connection
         //probably login
         //if it works do nothing
         //if not, warn the user of the error (connectivity, contact admin,...)
+    }
+
+    private String fetchHerokuConfigVar(){
+        try {
+            //run console process to get the database URL from config
+
+            //Linux
+            ProcessBuilder pb = new ProcessBuilder("/bin/bash", "-c", "heroku config:get DATABASE_URL -a photon-factory");
+
+            /*
+             For windows:
+             ProcessBuilder pb = new ProcessBuilder("cmd.exe", "-c", "heroku config:get DATABASE_URL -a photon-factory");
+             */
+
+            Process p = pb.start();
+            BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line = r.readLine();
+            return line;
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     //send form information as a relation to the Heroku database
@@ -320,6 +389,62 @@ public class FormController{
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private boolean checkFormErrors(){
+        boolean error_found = false;
+        if (nameError()){
+            handleNameError();
+            error_found = true;
+        }
+        if (projectError()){
+            handleProjectError();
+            error_found = true;
+        }
+        if (fromTimeError()){
+            handleFromTimeError();
+            error_found = true;
+        }
+        if (toTimeError()){
+            handleToTimeError();
+            error_found = true;
+        }
+        if (volumeError()){
+            handleVolumeError();
+            error_found = true;
+        }
+        if (notesError()){
+            handleNotesError();
+            error_found = true;
+        }
+        return error_found;
+    }
+
+    public boolean nameError(){
+        if (name.getValue().equals("")){
+            return true;
+        }
+        if (name == null){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean projectError(){
+        if (project.getValue().equals("")){
+            return true;
+        }
+        if (project == null){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean fromTimeError(){
+        LocalTime time = from_time.getValue();
+        if (time.isBefore(LocalTime.now())){
+            //TODO 
         }
     }
 
